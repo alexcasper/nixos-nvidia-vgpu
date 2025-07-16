@@ -1,39 +1,66 @@
-{ lib
-, buildPythonPackage
-, fetchurl
-, pip
-, isPy38
+# https://github.com/NixOS/nixpkgs/tree/fe51d34885f7b5e3e7b59572796e1bcb427eccb1/pkgs/development/python-modules/frida-python
+
+{
+  lib,
+  fetchPypi,
+  stdenvNoCC,
+  buildPythonPackage,
 }:
 let
-  pythonVersion = "38";
+  version = "16.7.11";
+  format = "wheel";
+  inherit (stdenvNoCC.hostPlatform) system;
+
+  # https://pypi.org/project/frida/#files
+  pypiMeta =
+    {
+      x86_64-linux = {
+        hash = "sha256-aAPVZPz1mn73JuQPGJ/PAOUAtaufeHehSKHzaBmVFF8=";
+        platform = "manylinux1_x86_64";
+      };
+      aarch64-linux = {
+        hash = "sha256-mQgfMJ6esH41MXnGZQUwF4j8gDgzfyBDUQo5Kw8TGa4=";
+        platform = "manylinux2014_aarch64";
+      };
+      x86_64-darwin = {
+        hash = "sha256-TuWvQ4oDkK5Fn/bp0G3eAhvDLlv0tzIQ8dKtysX36w0=";
+        platform = "macosx_10_13_x86_64";
+      };
+      aarch64-darwin = {
+        hash = "sha256-QWfWbGnKeuKiGoD0srnnMsbWPYFcYsbO/Oy68uJIRjI=";
+        platform = "macosx_11_0_arm64";
+      };
+    }
+    .${system} or (throw "Unsupported system: ${system}");
 in
-buildPythonPackage rec {
-  pname = "frida";
-  version = "12.10.4";
-  disabled = !isPy38;
-  wheelName = "frida-${version}-cp${pythonVersion}-cp${pythonVersion}-linux_x86_64.whl";
+buildPythonPackage {
+  pname = "frida-python";
+  inherit version format;
 
-  # building is somewhat complicated, described in https://nixos.wiki/wiki/Frida
-
-  src = fetchurl {
-    url = "https://dl.thalheim.io/FTyZDZ4fVNGJzc_kEuiclQ/${wheelName}";
-    sha256 = "1gzfkpn1j2gf616q615k3z7n10isnbvc8j3xb9s11ddrspwmxl81";
+  src = fetchPypi {
+    pname = "frida";
+    inherit version format;
+    inherit (pypiMeta) hash platform;
+    abi = "abi3";
+    python = "cp37";
+    dist = "cp37";
   };
 
-  nativeBuildInputs = [ pip ];
+  pythonImportsCheck = [
+    "frida"
+    "frida._frida"
+  ];
 
-  unpackPhase = ":";
-
-  format = "other";
-
-  installPhase = ''
-    cp $src ${wheelName}
-    pip install --prefix=$out ${wheelName}
-  '';
-
-  meta = with lib; {
-    description = "Dynamic instrumentation toolkit for developers, reverse-engineers, and security researchers";
+  meta = {
+    description = "Dynamic instrumentation toolkit for developers, reverse-engineers, and security researchers (Python bindings)";
     homepage = "https://www.frida.re";
-    license = licenses.wxWindows;
+    license = lib.licenses.wxWindows;
+    maintainers = with lib.maintainers; [ s1341 ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 }
