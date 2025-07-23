@@ -42,8 +42,8 @@ buildPythonPackage {
     inherit version format;
     inherit (pypiMeta) hash platform;
     abi = "abi3";
-    python = "cp310";
-    dist = "cp310";
+    python = "cp37";
+    dist = "cp37";
   };
 
   pythonImportsCheck = [
