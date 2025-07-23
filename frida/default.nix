@@ -5,7 +5,7 @@ let
   format = "wheel";
   wheelUrl = "https://files.pythonhosted.org/packages/ed/2d/2bcf5f9d61beba9d4134e1c8a1aa0944bebfd2dc8fe525eb3ed6afd8bc78/frida-17.2.12-cp37-abi3-win_arm64.whl";
   # Replace with the sha256 of your wheel (obtained by running `nix-prefetch-url --unpack <url>`)
-  hash = "sha256-sha256-ce419d852546c5cd7f54544191d5ed61b8435e971a95b4f348f4d79f8362faa9";
+  hash = "sha256-a0e5d8c7284e174b8d73de900612923022e24ca48751617e21e5eb9bcaddf578";
 in
 buildPythonPackage {
   pname = "frida-python";
