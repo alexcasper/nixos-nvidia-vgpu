@@ -11,6 +11,8 @@ buildPythonPackage {
   pname = "frida-python";
   inherit version format;
 
+ propagatedBuildInputs = [ typing-extensions ];  
+
   src = fetchurl {
     url = wheelUrl;
     sha256 = hash;
