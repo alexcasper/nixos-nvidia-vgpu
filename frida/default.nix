@@ -15,7 +15,7 @@ let
   pypiMeta =
     {
       x86_64-linux = {
-        hash = "sha256-66d819a846453a33448871bd30540c41de018c51c17201d8a158c47abeb6dd4a";
+        hash = "ce419d852546c5cd7f54544191d5ed61b8435e971a95b4f348f4d79f8362faa9";
         platform = "manylinux1_x86_64";
       };
       aarch64-linux = {
