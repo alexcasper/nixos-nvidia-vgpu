@@ -1,4 +1,4 @@
-{ lib, fetchurl, stdenvNoCC, buildPythonPackage }:
+{ lib, fetchurl, stdenvNoCC, buildPythonPackage, typing-extensions }:
 
 let
   version = "17.2.12";
